@@ -3,8 +3,11 @@ An extensible tool for extracting windows patches
 
 ## Usage
 Normal files: Full file doesn't need to apply delta patch
+
 Null files: Compressed file, apply delta patch to NULL buffer
+
 Forward files: Base + Forward = Updated
+
 Reverse files: Upated + Reverse  = Base
 
 - List windows product_id
