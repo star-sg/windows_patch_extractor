@@ -619,12 +619,14 @@ if __name__ == '__main__':
         # scan local machine for the same file with a lower version
         print_info(f'Searching for older verion of {fname} in {WINSXS_DIR}')
         local_scanner = do_scan_local()
+        #local_scanner2 = do_scan("C:\\Windows\\System32")
 
         def func(f:UpdateFile):
             if cmp_build_number(f.version, version) < 0:
                 return True
 
         m: Iterable[UpdateFile] = list(local_scanner.search_all_normal(fname, platform, func))
+        #m += list(local_scanner2.search_all_normal(fname, platform, func))
         if len(m) == 0:
             print_error('Can\'t find local file with smaller version')
             raise Exception('diff failed')
@@ -633,11 +635,15 @@ if __name__ == '__main__':
             print (tabulate(m))
             normal_file = m[0]
 
-            with open(os.path.join(out_dir, fname) + '_2', 'wb') as f:
+            ext = fname.split(".")[-1]
+            tmp_fname = "".join(fname.split(".")[:-1]) + "_target." + ext
+
+            #with open(os.path.join(out_dir, fname) + '_2', 'wb') as f:
+            with open(os.path.join(out_dir, tmp_fname), 'wb') as f:
                 f.write(file_data)
-            
+
             print_info(f'Copying {normal_file.path} to {out_dir}')
-            shutil.copy(normal_file.path, os.path.join(out_dir, fname) + '_1')
+            shutil.copy(normal_file.path, os.path.join(out_dir, fname))
 
 
     else:
